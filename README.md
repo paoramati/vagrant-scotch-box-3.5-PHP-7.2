@@ -6,3 +6,7 @@ Please visit Scotch Box main repo and support them , they are Awesome :)
 
 [https://github.com/scotch-io/scotch-box](https://github.com/scotch-io/scotch-box)
 
+## TODO
+
+- Update to Ubuntu 18.04 (LTS)
+- Add line to bootstrap script to use a domain name instead of ip address
