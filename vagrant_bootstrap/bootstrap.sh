@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-echo "Provisioning virtual machine ..."
+echo "Provisioning virtual machine..."
 
 # Add vg hostname
 
@@ -54,6 +54,38 @@ cp /var/www/vagrant_bootstrap/user.ini /etc/php/7.2/apache2/conf.d/
 
 a2dismod php7.0
 a2enmod php7.2
+
+service apache2 restart
+
+####################
+# AISIDPv2
+# Steps for provisioning AISIDP based on: https://github.com/paoramati/vagrant-simplesamlphp 
+# UPDATE 4.1.2020 - This is not working because the repo is private!!!
+# echo "Provisioning AISIDP..."
+# cd /var/www/public
+# git clone https://gitlab.com/ais-operations/aisidp_v2
+# cd /var/www/public/aisidp_v2
+# mkdir -p config && cp -r config-templates/* config/
+# mkdir -p metadata && cp -r metadata-templates/* metadata/
+
+# Download SimpleSAML and we will manually copy required AISIDP files after VM spun up
+cd /var/www/public
+git clone https://github.com/simplesamlphp/simplesamlphp.git aisidp_v2
+cd /var/www/public/aisidp_v2
+cp -r config-templates/* config/
+cp -r metadata-templates/* metadata/
+
+# SSL & certificate for AISIDP
+cd /var/www/public/aisidp_v2
+mkdir -p cert
+openssl req -x509 -batch -nodes -newkey rsa:2048 -keyout cert/saml.pem -out cert/saml.crt
+
+# BMP These are just causing too many fatal crashes. Best to run composer install + any asset building later
+# install SSP external dependences
+# php composer.phar install
+# npm install
+# build SSP assets
+# npm run build
 
 
 # Finally, restart apache
